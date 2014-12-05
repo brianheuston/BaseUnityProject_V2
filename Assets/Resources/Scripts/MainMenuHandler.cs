@@ -15,8 +15,8 @@ public class MainMenuHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         CurrentState = MenuState.Normal;
-        mainMenu = GameObject.Find("MainMenu");
-        quitMenu = GameObject.Find("QuitGameMenu");
+        mainMenu = GameObject.Find("MainMenuCanvas");
+        quitMenu = GameObject.Find("QuitCanvas");
 	}
 	
 	// Update is called once per frame
@@ -47,5 +47,10 @@ public class MainMenuHandler : MonoBehaviour {
     public void CreateQuitGamePopup()
     {
         CurrentState = MenuState.Quit;
+    }
+
+    public void NewGame()
+    {
+        Application.LoadLevel("GameScene");
     }
 }
