@@ -2,8 +2,15 @@
 using System.Collections;
 
 public class GameOverlayScript : MonoBehaviour {
-    // This is checked 
-    private Resolution cachedResolution;
+    enum MenuState {
+        GAME,
+        PAUSE,
+        OPTIONS,
+        QUIT
+    }
+
+    private MenuState oCurrentState;
+
     private float fOldTimeScale;
 
     private string szPauseMenuName = "PauseCanvas";
@@ -23,37 +30,75 @@ public class GameOverlayScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    switch (oCurrentState)
+        {
+            case MenuState.GAME:
+                GameState();
+                break;
+            case MenuState.PAUSE:
+                PauseState();
+                break;
+            case MenuState.OPTIONS:
+                OptionsState();
+                break;
+            case MenuState.QUIT:
+                QuitState();
+                break;
+        }
 	}
 
     void FixedUpdate()
     {
     }
 
-    public void PauseGame()
-    {
-        fOldTimeScale = Time.timeScale;
-        Time.timeScale = 0.0f;
-
-        oPauseMenu.SetActive(true);
-    }
-
-    public void ResumeGame()
+    #region GameStateFunctions
+    private void GameState()
     {
         oPauseMenu.SetActive(false);
+        oQuitMenu.SetActive(false);
         Time.timeScale = fOldTimeScale;
     }
 
-    public void QuitPrompt()
+    private void QuitState()
     {
         oPauseMenu.SetActive(false);
         oQuitMenu.SetActive(true);
     }
 
-    public void QuitCancel()
+    private void PauseState()
     {
+        fOldTimeScale = Time.timeScale;
+        Time.timeScale = 0.0f;
+
         oPauseMenu.SetActive(true);
         oQuitMenu.SetActive(false);
+    }
+
+    private void OptionsState()
+    {
+
+    }
+    #endregion
+
+    #region MenuFunctions
+    public void PauseGame()
+    {
+        oCurrentState = MenuState.PAUSE;
+    }
+
+    public void ResumeGame()
+    {
+        oCurrentState = MenuState.GAME;
+    }
+
+    public void QuitPrompt()
+    {
+        oCurrentState = MenuState.QUIT;
+    }
+
+    public void QuitCancel()
+    {
+        oCurrentState = MenuState.PAUSE;
     }
 
     public void QuitGame()
@@ -61,4 +106,5 @@ public class GameOverlayScript : MonoBehaviour {
         Time.timeScale = fOldTimeScale;
         Application.LoadLevel("MainMenuScene");
     }
+    #endregion
 }
