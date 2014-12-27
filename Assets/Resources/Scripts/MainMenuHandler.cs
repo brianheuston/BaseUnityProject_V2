@@ -7,31 +7,42 @@ public class MainMenuHandler : MonoBehaviour {
         Normal,
         Quit
     }
-    private MenuState CurrentState;
+    private MenuState currentState;
+    private MenuState CurrentState
+    {
+        get
+        {
+            return currentState;
+        }
+        set
+        {
+            currentState = value;
+
+            switch (currentState)
+            {
+                case MenuState.Normal:
+                    NormalState();
+                    break;
+                case MenuState.Quit:
+                    QuitState();
+                    break;
+            }
+        }
+    }
 
     private GameObject mainMenu;
     private GameObject quitMenu;
 
 	// Use this for initialization
 	void Start () {
-        CurrentState = MenuState.Normal;
         mainMenu = GameObject.Find("MainMenuCanvas");
         quitMenu = GameObject.Find("QuitCanvas");
+
+        CurrentState = MenuState.Normal;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        switch (CurrentState)
-        {
-            case MenuState.Normal:
-                mainMenu.SetActive(true);
-                quitMenu.SetActive(false);
-                break;
-            case MenuState.Quit:
-                mainMenu.SetActive(false);
-                quitMenu.SetActive(true);
-                break;
-        }
 	}
 
     public void QuitGame()
@@ -53,4 +64,18 @@ public class MainMenuHandler : MonoBehaviour {
     {
         Application.LoadLevel("GameScene");
     }
+
+    #region STATE_FUNCTIONS
+    private void NormalState()
+    {
+        mainMenu.SetActive(true);
+        quitMenu.SetActive(false);
+    }
+
+    private void QuitState()
+    {
+        mainMenu.SetActive(false);
+        quitMenu.SetActive(true);
+    }
+    #endregion
 }

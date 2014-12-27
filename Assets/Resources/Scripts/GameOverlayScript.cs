@@ -9,7 +9,32 @@ public class GameOverlayScript : MonoBehaviour {
         QUIT
     }
 
-    private MenuState oCurrentState;
+    private MenuState currentState;
+    private MenuState CurrentState {
+        get
+        {
+            return currentState;
+        }
+        set {
+            currentState = value;
+
+            switch (currentState)
+            {
+                case MenuState.GAME:
+                    GameState();
+                    break;
+                case MenuState.PAUSE:
+                    PauseState();
+                    break;
+                case MenuState.OPTIONS:
+                    OptionsState();
+                    break;
+                case MenuState.QUIT:
+                    QuitState();
+                    break;
+            }
+        }
+    }
 
     private float fOldTimeScale;
 
@@ -30,21 +55,7 @@ public class GameOverlayScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    switch (oCurrentState)
-        {
-            case MenuState.GAME:
-                GameState();
-                break;
-            case MenuState.PAUSE:
-                PauseState();
-                break;
-            case MenuState.OPTIONS:
-                OptionsState();
-                break;
-            case MenuState.QUIT:
-                QuitState();
-                break;
-        }
+	    
 	}
 
     void FixedUpdate()
@@ -83,22 +94,22 @@ public class GameOverlayScript : MonoBehaviour {
     #region MenuFunctions
     public void PauseGame()
     {
-        oCurrentState = MenuState.PAUSE;
+        CurrentState = MenuState.PAUSE;
     }
 
     public void ResumeGame()
     {
-        oCurrentState = MenuState.GAME;
+        CurrentState = MenuState.GAME;
     }
 
     public void QuitPrompt()
     {
-        oCurrentState = MenuState.QUIT;
+        CurrentState = MenuState.QUIT;
     }
 
     public void QuitCancel()
     {
-        oCurrentState = MenuState.PAUSE;
+        CurrentState = MenuState.PAUSE;
     }
 
     public void QuitGame()
